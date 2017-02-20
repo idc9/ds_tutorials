@@ -1,6 +1,6 @@
 ---
 title: "**Data Science Tutorials**"
-author: 'Iain Carmichael'
+author: '[Iain Carmichael](https://github.com/idc9)'
 output:
   html_document:
     theme: cosmo
@@ -21,7 +21,13 @@ The (free) [R for Data Science](http://r4ds.had.co.nz/) by Hadley Wickham is a f
 
 [These viz + subsetting exercises](R/movies_ggplot_dplyr.html) will give you practice data manipulation and plotting with `dplyr` and `ggplot`. If you are familiar with base R these will be helpful to learn the [tidyverse](http://tidyverse.org/). 
 
+
 # **Python**
+
+If you are new to Python and have some previous programming experience I suggest going through [Google's Python class](https://developers.google.com/edu/python/) to get started with Python. Spend a couple hours working through the class until you get the hang of it. Then download [Anaconda](https://www.continuum.io/downloads) which has most of the stats/machine learning Python packages you'll need. It also comes with [Jupyter notebook](http://jupyter.org/) (formerly iPython) which you should use for data science projects. *Warning*: both Python 2 and 3 are commonly used.
+
+
+
 
 [These viz + subsetting exercises](Python/movies_viz_subsetting.html) will give you practice data manipulation and plotting with `pandas` and `matplotlib`.
 
