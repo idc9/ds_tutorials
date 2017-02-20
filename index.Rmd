@@ -1,5 +1,6 @@
 ---
 title: "Data Science Tutorials"
+author: 'Iain Carmichael'
 output:
   html_document:
     theme: cosmo
@@ -9,3 +10,36 @@ output:
 
 
 This page contains a number of introduction to data science tutorials and a list of resources that I've found helpful to learn data science.
+
+
+# R
+
+## Brand new to R
+
+## Vizualization and subsetting
+
+
+## More advanced visualization and machine learning
+
+## Resources
+
+# Python
+
+## Learn Python
+
+## Vizualization and subsetting
+
+
+## More advanced visualization and machine learning
+
+## Resources
+
+
+# Acknowledgements
+
+A number of people helped created these tutorials including
+
+- [Ethan Koch](https://www.linkedin.com/in/ethan-koch-25668b113/)
+- [Wenyue Liu](https://www.linkedin.com/in/bismarckliu/)
+- [Nikhil Prasad](https://www.linkedin.com/in/globmont/)
+
