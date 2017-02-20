@@ -1,0 +1,151 @@
+---
+title: "Introduction to Data Science: IMDb vs. Rotten Tomatoes"
+subtitle: 'Visualization and data manipulation with R'
+output: html_document
+---
+This tutorial will give you practice with
+
+- data visualization with `ggplot2`
+- data manipulation with `dplyr`
+You can find every thing you need to know in the (free) [R for Data Science](http://r4ds.had.co.nz/) textbook by Hadley Wickham (primarily chapters 3 and 5).
+
+This tutorial assumes you have some familiarity with R (though not strictly necessary). If you already good with base R this tutorial is a good way to learn the [tidyverse](http://tidyverse.org/) which you should use. 
+
+
+**Hints**
+
+- do all the problems in an R script
+- the [ggplot2](http://docs.ggplot2.org/current/) documentation has a lot of good example code
+- you might find the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) helpful
+- Google, Google, Google
+- when debugging clear the R Studio workspace frequently
+- for long strings of R commands use the pipe operator `%>%` (also called chaining)
+- avoid base R when possible
+    - `dplyr` for subsetting
+    - `ggplot` for plotting
+    - `tibble` instead of `data.frame` (warning: I refer to `tibble` as a data frame)
+- update R/R Studio if you have not done so in the past couple months
+
+# **The data**
+
+I've always wanted to compare IMDb and Rotten Tomatoes ratings. The data include 651 randomly selected movies scraped from the IMDb and Rotten Tomatoes websites. The data were generously provided by [Mine Cetinkaya-Rundel](http://www2.stat.duke.edu/~mc301/) and you can find the original data set on [her website](http://www2.stat.duke.edu/~mc301/data/movies.html).
+
+```{r, warning=FALSE, message=FALSE}
+# install.packages('tidyverse')
+library(tidyverse)
+
+# read the data into R from Iain's github
+movies <- read_csv('https://raw.githubusercontent.com/idc9/stor390/master/data/movies.csv')
+```
+
+
+The first think you should do when you see a new data set is [look at it](https://www.youtube.com/watch?v=EF8GhC-T_Mo).
+```{r}
+head(movies)
+```
+
+A couple other functions that are useful for a first look.
+```{r, eval=F}
+dim(movies)
+colnames(movies)
+str(movies)
+summary(movies)
+```
+You can also check out R Studio's spreadsheet view.
+
+
+# **Visualization**
+Answer all the questions using `ggplot`. The `ggplot` syntax is a little weird, especially if you are used to base R. In order to use `ggplot` your data frame has to be in a data frame object. You can read about `ggplot` in [r4ds chapter 3](http://r4ds.had.co.nz/data-visualisation.html), but here is a first example
+
+```{r}
+ggplot(data=movies) +
+    geom_point(aes(x=imdb_num_votes, y=imdb_rating))
+```
+
+Make a histogram of **imdb_rating**. *Hint*: `geom_histogram`.
+```{r}
+#
+```
+
+Make the above histogram with 100 bins.
+```{r}
+#
+```
+
+
+Make a scatter plot comparing Rotten Tomatoes critic score vs. imdb ratings. *Hint*: `geom_point`. Change the x/y axis labels to something nicer and add a title.
+```{r}
+#
+```
+
+Make the same rt vs. imdb scatter plot as above but facet by **mpaa_ratings**.
+```{r}
+#
+```
+
+Again make the same rt vs. imdb  scatter plot but color the points by **mpaa_ratings**.
+```{r}
+#
+```
+
+One last time make the rt vs. imdb scatter plot but now try including **runtime** as a third variable using point
+
+- color
+- size
+- alpha
+
+Which one of these is "best"?
+
+```{r}
+#
+```
+
+# **Data transformation**
+Use the `dplyr` package to answer the following questions. Use the pipe  `%>%` operator for long strings of commands.
+
+Use the `select` function to keep the following variables: **runtime**, **genre**, **mpaa_rating**, **thtr_rel_year**, **imdb_rating**, **imdb_num_votes**, **critics_score**, **audience_score**, and **best_pic_win**. Make sure to update the movies data frame.
+```{r}
+#
+```
+
+
+Use `select` then `summarise_all` to compute the mean of each continuous variable (what is the difference between `summarise` and `summarise_all`?)
+```{r}
+#
+```
+
+Oops! The mean of **runtime** is `NA` because one of its values is `NA`. Looks like IMDb is missing one of the run times. Modify the above code to compute the mean ignoring missing values. *Hint*: use an `anonoymous` function.
+
+
+```{r, eval=F}
+# you'll find this piece of code helpful
+# summarise_all(function(x) mean(x, na.rm=T))
+```
+
+Which movie is missing the runtime? *Hint*: use `filter` and `na.rm`. 
+```{r}
+#
+```
+
+Google this film and manually add the runtime using base R.
+```{r}
+#
+```
+
+Use `group_by` then `summarise` to compute the mean imdb rating for movies by genre. 
+```{r}
+#
+```
+
+Similarly, compute the mean number of imdb votes for each mpaa_rating category then plot the mean ratings. *Hint*: you will need to use `stat='identity'`.
+```{r}
+#
+```
+
+Compute the compare the average imdb rating of movies longer than 100 minutes to that of movies shorter than 100 minutes. The resulting printed out data frame should only have two columns.
+```{r}
+#
+```
+
+
+
