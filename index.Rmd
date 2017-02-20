@@ -1,0 +1,11 @@
+---
+title: "Data Science Tutorials"
+output:
+  html_document:
+    theme: cosmo
+    toc: yes
+    toc_float: yes
+---
+
+
+This page contains a number of introduction to data science tutorials and a list of resources that I've found helpful to learn data science.
