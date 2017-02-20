@@ -1,5 +1,5 @@
 ---
-title: "Data Science Tutorials"
+title: "**Data Science Tutorials**"
 author: 'Iain Carmichael'
 output:
   html_document:
@@ -12,34 +12,27 @@ output:
 This page contains a number of introduction to data science tutorials and a list of resources that I've found helpful to learn data science.
 
 
-# R
-
-## Brand new to R
-
-## Vizualization and subsetting
+# **R**
 
 
-## More advanced visualization and machine learning
-
-## Resources
-
-# Python
-
-## Learn Python
-
-## Vizualization and subsetting
+The (free) [R for Data Science](http://r4ds.had.co.nz/) by Hadley Wickham is a fantastic resource to learn R.
 
 
-## More advanced visualization and machine learning
 
-## Resources
+[These viz + subsetting exercises](R/movies_ggplot_dplyr.html) will give you practice data manipulation and plotting with `dplyr` and `ggplot`. If you are familiar with base R these will be helpful to learn the [tidyverse](http://tidyverse.org/). 
+
+# **Python**
+
+[These viz + subsetting exercises](Python/movies_viz_subsetting.html) will give you practice data manipulation and plotting with `pandas` and `matplotlib`.
 
 
-# Acknowledgements
+
+# **Acknowledgements**
 
 A number of people helped created these tutorials including
 
 - [Ethan Koch](https://www.linkedin.com/in/ethan-koch-25668b113/)
 - [Wenyue Liu](https://www.linkedin.com/in/bismarckliu/)
 - [Nikhil Prasad](https://www.linkedin.com/in/globmont/)
+- [Mine Cetinkaya-Rundel](http://www2.stat.duke.edu/~mc301/) generously provided the *movies.csv* data set.
 
