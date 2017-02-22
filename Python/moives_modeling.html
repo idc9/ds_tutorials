@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>movies_viz_subsetting</title>
+<title>moives_modeling</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11751,7 +11751,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Data-manipulation-and-visualization-in-Python">Data manipulation and visualization in Python<a class="anchor-link" href="#Data-manipulation-and-visualization-in-Python">&#182;</a></h1>
+<h1 id="Modeling-and-visualization-in-Python">Modeling and visualization in Python<a class="anchor-link" href="#Modeling-and-visualization-in-Python">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -11760,29 +11760,31 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This tutorial will give you practice with</p>
+<p>This tutorial will give you practice with statistical modeling. Specifically</p>
 <ul>
-<li>data visualization with <code>matplotlib</code></li>
-<li>data manipulation with <code>pandas</code></li>
+<li>test/training set</li>
+<li>cross-validation</li>
+<li>logistic regression</li>
+<li>L1/L2 regularized logistic regression</li>
+<li>Support Vector Machine</li>
+<li>Kernel SVM</li>
+<li>PCA</li>
 </ul>
-<p><a href="http://www3.canisius.edu/~yany/python/Python4DataAnalysis.pdf">Python for Data Analysis</a> is a good Python reference. My favorite quick pandas resources is <a href="http://chrisalbon.com/">Chris Albon's website</a>. This <a href="http://nbviewer.jupyter.org/github/ResearchComputing/Meetup-Fall-2013/blob/master/python/lecture_17_matplotlib.ipynb">matplotlib</a> tutorial is pretty decent. As always Google is your best friend, but here are some other python data science references</p>
+<p><a href="http://www-bcf.usc.edu/~gareth/ISL/">ISLR</a> is a good reference for all of these topics (4.3, 5.1, 6.2, 9.1-9.3, 10.2)</p>
+<p><strong>Prerequisites</strong>: this tutorial assumes you are familiar with the above models (or are willing to learn about them). The questions are fairly independent so you can skip parts you don't like/understand. This tutorial also assumes you are familiar with pandas and numpy.</p>
+<p>This tutorial uses the following python packages (you should install them at the beginning)</p>
 <ul>
-<li><p><a href="http://pandas.pydata.org/pandas-docs/stable/10min.html">10 minute intro to pandas</a></p>
-</li>
-<li><p>These three pandas tutorials from University of Colorado <a href="http://nbviewer.jupyter.org/github/ResearchComputing/Meetup-Fall-2013/blob/master/python/lecture_10_pandas_introduction.ipynb">1</a>, <a href="http://nbviewer.jupyter.org/github/ResearchComputing/Meetup-Fall-2013/blob/master/python/lecture_11_pandas_adding_data.ipynb">2</a>, <a href="http://nbviewer.jupyter.org/github/ResearchComputing/Meetup-Fall-2013/blob/master/python/lecture_12_pandas_groupby.ipynb">3</a>.</p>
-</li>
-<li><p>These <a href="http://wavedatalab.github.io/datawithpython/index.html">tutorials</a> from python for data science.</p>
-</li>
+<li><a href="http://statsmodels.sourceforge.net/install.html">statsmodels</a></li>
+<li>a few packages that come with <a href="https://www.continuum.io/downloads">anaconda</a>: pandas, numpy, matplotlib, sklearn</li>
 </ul>
-<p>Pandas can be a little weird at first because there are several ways to subset the data and rows come with indexing.</p>
-<p>If you are already comfortable with <code>matplotlib</code> you might try the <a href="http://seaborn.pydata.org/index.html">seaborn</a> package.</p>
+<p><strong>Warning</strong>: we are working with pandas data frames but most of the modeling packages (statsmodels and sklearn) do not take pandas data frames as input. You will have to figure out the right input format (usually a numpy array).</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># these packages come with Anaconda</span>
@@ -11811,7 +11813,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># read in the data set from Iain&#39;s github</span>
@@ -11820,54 +11822,10 @@ div#notebook {
 <span class="c1"># index by movie title</span>
 <span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
 
+<span class="c1"># add in a missing value</span>
+<span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;The End of America&#39;</span><span class="p">,</span> <span class="s1">&#39;runtime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">73</span>
+
 <span class="n">movies</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">movies</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Visualization">Visualization<a class="anchor-link" href="#Visualization">&#182;</a></h1><p>Answer all the following questions with matplotlib i.e.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">movies</span><span class="p">[</span><span class="s1">&#39;imdb_num_votes&#39;</span><span class="p">],</span> <span class="n">movies</span><span class="p">[</span><span class="s1">&#39;imdb_rating&#39;</span><span class="p">])</span>
-
-<span class="c1"># change axis labels</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;number of votes&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;imdb rating&#39;</span><span class="p">)</span>
-
-<span class="c1"># set axis limits</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">movies</span><span class="p">[</span><span class="s1">&#39;imdb_num_votes&#39;</span><span class="p">])])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">movies</span><span class="p">[</span><span class="s1">&#39;imdb_rating&#39;</span><span class="p">])])</span>
-
-<span class="c1"># add a title</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;number of votes vs. imdb rating&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11878,444 +11836,631 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
 
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.text.Text at 0x11b4ad450&gt;</pre>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title_type</th>
+      <th>genre</th>
+      <th>runtime</th>
+      <th>mpaa_rating</th>
+      <th>studio</th>
+      <th>thtr_rel_year</th>
+      <th>thtr_rel_month</th>
+      <th>thtr_rel_day</th>
+      <th>dvd_rel_year</th>
+      <th>dvd_rel_month</th>
+      <th>...</th>
+      <th>best_dir_win</th>
+      <th>top200_box</th>
+      <th>director</th>
+      <th>actor1</th>
+      <th>actor2</th>
+      <th>actor3</th>
+      <th>actor4</th>
+      <th>actor5</th>
+      <th>imdb_url</th>
+      <th>rt_url</th>
+    </tr>
+    <tr>
+      <th>title</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Filly Brown</th>
+      <td>Feature Film</td>
+      <td>Drama</td>
+      <td>80.0</td>
+      <td>R</td>
+      <td>Indomina Media Inc.</td>
+      <td>2013.0</td>
+      <td>4.0</td>
+      <td>19.0</td>
+      <td>2013.0</td>
+      <td>7.0</td>
+      <td>...</td>
+      <td>no</td>
+      <td>no</td>
+      <td>Michael D. Olmos</td>
+      <td>Gina Rodriguez</td>
+      <td>Jenni Rivera</td>
+      <td>Lou Diamond Phillips</td>
+      <td>Emilio Rivera</td>
+      <td>Joseph Julian Soria</td>
+      <td>http://www.imdb.com/title/tt1869425/</td>
+      <td>//www.rottentomatoes.com/m/filly_brown_2012/</td>
+    </tr>
+    <tr>
+      <th>The Dish</th>
+      <td>Feature Film</td>
+      <td>Drama</td>
+      <td>101.0</td>
+      <td>PG-13</td>
+      <td>Warner Bros. Pictures</td>
+      <td>2001.0</td>
+      <td>3.0</td>
+      <td>14.0</td>
+      <td>2001.0</td>
+      <td>8.0</td>
+      <td>...</td>
+      <td>no</td>
+      <td>no</td>
+      <td>Rob Sitch</td>
+      <td>Sam Neill</td>
+      <td>Kevin Harrington</td>
+      <td>Patrick Warburton</td>
+      <td>Tom Long</td>
+      <td>Genevieve Mooy</td>
+      <td>http://www.imdb.com/title/tt0205873/</td>
+      <td>//www.rottentomatoes.com/m/dish/</td>
+    </tr>
+    <tr>
+      <th>Waiting for Guffman</th>
+      <td>Feature Film</td>
+      <td>Comedy</td>
+      <td>84.0</td>
+      <td>R</td>
+      <td>Sony Pictures Classics</td>
+      <td>1996.0</td>
+      <td>8.0</td>
+      <td>21.0</td>
+      <td>2001.0</td>
+      <td>8.0</td>
+      <td>...</td>
+      <td>no</td>
+      <td>no</td>
+      <td>Christopher Guest</td>
+      <td>Christopher Guest</td>
+      <td>Catherine O'Hara</td>
+      <td>Parker Posey</td>
+      <td>Eugene Levy</td>
+      <td>Bob Balaban</td>
+      <td>http://www.imdb.com/title/tt0118111/</td>
+      <td>//www.rottentomatoes.com/m/waiting_for_guffman/</td>
+    </tr>
+    <tr>
+      <th>The Age of Innocence</th>
+      <td>Feature Film</td>
+      <td>Drama</td>
+      <td>139.0</td>
+      <td>PG</td>
+      <td>Columbia Pictures</td>
+      <td>1993.0</td>
+      <td>10.0</td>
+      <td>1.0</td>
+      <td>2001.0</td>
+      <td>11.0</td>
+      <td>...</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>Martin Scorsese</td>
+      <td>Daniel Day-Lewis</td>
+      <td>Michelle Pfeiffer</td>
+      <td>Winona Ryder</td>
+      <td>Richard E. Grant</td>
+      <td>Alec McCowen</td>
+      <td>http://www.imdb.com/title/tt0106226/</td>
+      <td>//www.rottentomatoes.com/m/age_of_innocence/</td>
+    </tr>
+    <tr>
+      <th>Malevolence</th>
+      <td>Feature Film</td>
+      <td>Horror</td>
+      <td>90.0</td>
+      <td>R</td>
+      <td>Anchor Bay Entertainment</td>
+      <td>2004.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+      <td>2005.0</td>
+      <td>4.0</td>
+      <td>...</td>
+      <td>no</td>
+      <td>no</td>
+      <td>Stevan Mena</td>
+      <td>Samantha Dark</td>
+      <td>R. Brandon Johnson</td>
+      <td>Brandon Johnson</td>
+      <td>Heather Magee</td>
+      <td>Richard Glover</td>
+      <td>http://www.imdb.com/title/tt0388230/</td>
+      <td>//www.rottentomatoes.com/m/10004684-malevolence/</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 31 columns</p>
+</div>
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Let&#39;s focus on a few columns</span>
+<span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">&#39;runtime&#39;</span><span class="p">,</span><span class="s1">&#39;genre&#39;</span><span class="p">,</span> <span class="s1">&#39;mpaa_rating&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;thtr_rel_year&#39;</span><span class="p">,</span> <span class="s1">&#39;imdb_rating&#39;</span><span class="p">,</span> <span class="s1">&#39;imdb_num_votes&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;critics_score&#39;</span><span class="p">,</span> <span class="s1">&#39;audience_score&#39;</span><span class="p">,</span> <span class="s1">&#39;best_actor_win&#39;</span><span class="p">]]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Visualizing-high-dimensional-data">Visualizing high dimensional data<a class="anchor-link" href="#Visualizing-high-dimensional-data">&#182;</a></h1><p>We can't visualize more than two or three dimensions at a time, but data typically come in much higher dimensions. One way to take a peak at high dimensional data is to make lots of one and two dimensional slices.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Make the plot described below for the following four variables: <strong>audience_score</strong>, <strong>critics_score</strong>, and <strong>imdb_rating</strong>. (See the <a href="http://ggobi.github.io/ggally/#columns_and_mapping">ggpairs function from GGally</a> for a similar example).</p>
+<p>Make a 3 x 3 grid of plots. The diagonal should be a histogram (or KDE) of each variable. The off diagonal should be a scatter plot of the ith variable vs. the jth variable. You can make this grid "upper diagonal" (i.e. you don't need to plot i vs. j if you already have j vs. i).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Make the PC component plots. Get the data matrix X for the following 6 variables: <strong>runtime</strong>, <strong>thtr_rel_year</strong>, <strong>imdb_num_votes</strong>, <strong>critics_score</strong>, <strong>audience_score</strong>.</p>
+<p>Compute the PCA of X. First column center X and standardize the columns of X by the standard deviation. Then let X = U D V^T be the Singular Value Decomposition of X (use <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.svd.html">numpy's SVD function</a>). Let $U_k$ be the first k columns of the scores matrix U D (recall the columns are ordered by the increasing eigenvalues).</p>
+<p>Let k = 3. Make the above grid plot for for the scores (i.e. the 3 columns of $U_k$ are now the variables).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Inference-task:-how-are-movie-ratings-related-to-best-actor-winning-an-Oscar?">Inference task: how are movie ratings related to best actor winning an Oscar?<a class="anchor-link" href="#Inference-task:-how-are-movie-ratings-related-to-best-actor-winning-an-Oscar?">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Fit a simple logistic regression model <strong>best_actor_win</strong> ~ <strong>imdb_rating</strong>. Use the logistic regression function from <a href="http://statsmodels.sourceforge.net/0.6.0/generated/statsmodels.discrete.discrete_model.Logit.html">statsmodels</a>.</p>
+<p>What is the interpretation of the <strong>imdb_rating</strong> coefficient?</p>
+<p>(Bonus): make one of <a href="http://www.cookbook-r.com/Statistical_analysis/Logistic_regression/">these plots</a> with <strong>imdb_rating</strong> on the x axis and the predicted probabilty on the y axis (including the data points).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Again fit a logistic regression model, but this time include all of the covariates. <em>Hint</em>: You need to deal with categorical variables -- change these into dummy variables.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Discuss what is the interpretation of these coefficients? Can we make any make any conclusions about causal ralationships? If not, how would you try to get at causation (i.e. study design)?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Prediction-task:-what's-the-best-model-to-predict-whether-or-not-the-best-actor-will-win-an-Oscar?">Prediction task: what's the best model to predict whether or not the best actor will win an Oscar?<a class="anchor-link" href="#Prediction-task:-what's-the-best-model-to-predict-whether-or-not-the-best-actor-will-win-an-Oscar?">&#182;</a></h1><p>The point of this section is to fit several models and compare them on a test set. Specifically we are ging to fit the following models</p>
+<ul>
+<li>L1 regularized logistic regression</li>
+<li>L2 regularized logistic regression</li>
+<li>Support Vector Machine</li>
+<li>Kernel Support Vector machine</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="turn-the-categorical-variables-into-dummy-variables">turn the categorical variables into dummy variables<a class="anchor-link" href="#turn-the-categorical-variables-into-dummy-variables">&#182;</a></h2><p><em>Hint</em>: pd.get_dummies. You data frame should only have <em>numbers</em> in it now.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Make-a-test-set">Make a test set<a class="anchor-link" href="#Make-a-test-set">&#182;</a></h2><p>Split the data into a training and test set (80% train, 20% test). Since the classes are fairly unbalanced you should use stratified sampling. Make two new data frames (called <strong>train</strong> and <strong>test</strong>).</p>
+<p>Fit all of the following models with the training data.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Fit-logistic-regresssion-with-L2-regularization-using-cross-validation">Fit logistic regresssion with L2 regularization using cross-validation<a class="anchor-link" href="#Fit-logistic-regresssion-with-L2-regularization-using-cross-validation">&#182;</a></h2><p>Use the <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">Logistic Regression</a> object from sklearn.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># parameters for cross validation</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">C_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span> <span class="o">**</span> <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+<span class="n">cv_error_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">C_values</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>fill in the following code for cross-validation</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="c1"># split into train/test folds</span>
+    <span class="c1"># train_cv = </span>
+    <span class="c1"># test_cv = </span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C_values</span><span class="p">)):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">C_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        
+        <span class="c1"># fit logistic regression on train_cv with cost value c</span>
+        <span class="c1"># logreg_cv = </span>
+        
+        <span class="c1"># use logreg_cv to get the test set error on test_cv</span>
+        <span class="c1"># cv_err = </span>
+        
+        <span class="c1"># cv_error_matrix[k, i] = cv_err</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Plot the cv-error vs. C. Show each a scatter plot of each point and the mean cv error for each value of C.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Decide on the best value of C. Now train the model on the full training data with the value of C that you settled on.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Use-cross-validation-to-fit-logistic-regression-with-L1-regularization">Use cross validation to fit logistic regression with L1 regularization<a class="anchor-link" href="#Use-cross-validation-to-fit-logistic-regression-with-L1-regularization">&#182;</a></h1><p>This should be mostly a matter of copying the above code.</p>
+<p>Compare the coefficients, $\beta$ of L1 vs. L2 regularized logistic regression. What do you notice?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="GridSearchCv-example">GridSearchCv example<a class="anchor-link" href="#GridSearchCv-example">&#182;</a></h1><p>This time use the <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">GridSearchCV</a> function from sklearn. Here is some exmaple code.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span> <span class="c1"># you might have to update sklearn</span>
+
+<span class="c1"># small example data set</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">&#39;runtime&#39;</span><span class="p">,</span> <span class="s1">&#39;best_actor_win&#39;</span><span class="p">,</span> <span class="s1">&#39;imdb_rating&#39;</span><span class="p">]]</span>
+
+<span class="c1"># binarize best_actor_win</span>
+<span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;best_actor_win&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">best_actor_win</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># initialize the model</span>
+<span class="n">svc</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+
+<span class="c1"># cross validation parameters</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rbf&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># initialize grid serach object</span>
+<span class="n">gs_cv</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">svc</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># fit the grid search. Notice the formats of each input!</span>
+<span class="n">gs_results</span> <span class="o">=</span> <span class="n">gscv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;runtime&#39;</span><span class="p">,</span> <span class="s1">&#39;imdb_rating&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">(),</span>
+                      <span class="n">data</span><span class="p">[</span><span class="s1">&#39;best_actor_win&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fitting 5 folds for each of 50 candidates, totalling 250 fits
+</pre>
+</div>
 </div>
 
 <div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=1)]: Done 250 out of 250 | elapsed:    3.5s finished
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># now use the gs_results object to find the optimal values of the tuning parameters</span>
+<span class="n">gs_results</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
 
 
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
+<div class="output_area"><div class="prompt output_prompt">Out[37]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>GridSearchCV(cv=5, error_score=&#39;raise&#39;,
+       estimator=SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=None, degree=3, gamma=&#39;auto&#39;, kernel=&#39;rbf&#39;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False),
+       fit_params={}, iid=True, n_jobs=1,
+       param_grid={&#39;kernel&#39;: [&#39;rbf&#39;], &#39;C&#39;: [0.01, 0.1, 1, 10, 100], &#39;gamma&#39;: [0.0, 0.10000000000000001, 0.20000000000000001, 0.30000000000000004, 0.40000000000000002, 0.5, 0.60000000000000009, 0.70000000000000007, 0.80000000000000004, 0.90000000000000002]},
+       pre_dispatch=&#39;2*n_jobs&#39;, refit=True, return_train_score=True,
+       scoring=None, verbose=1)</pre>
 </div>
 
 </div>
@@ -12329,7 +12474,7 @@ mVU4QTAzM7MKJwhmZmZW4QTBzMzMKv4fWXuvnSKrHeAAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Make a histogram of <strong>imdb_rating</strong>.</p>
+<h1 id="Use-GridSearchCV-to-tune-linear-SVM">Use GridSearchCV to tune linear SVM<a class="anchor-link" href="#Use-GridSearchCV-to-tune-linear-SVM">&#182;</a></h1><p>Use <a href="http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html">LinearSVC</a> from SKlearn</p>
 
 </div>
 </div>
@@ -12352,10 +12497,37 @@ mVU4QTAzM7MKJwhmZmZW4QTBzMzMKv4fWXuvnSKrHeAAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Make the above histogram with 100 bins.</p>
+<h1 id="Use-GridSearchCV-to-tune-Kernel-SVM">Use GridSearchCV to tune Kernel SVM<a class="anchor-link" href="#Use-GridSearchCV-to-tune-Kernel-SVM">&#182;</a></h1><p>Use the <a href="http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC">SVC</a> function from sklearn.</p>
+<p>Try both a polynomial kernel ('poly') and a radial basis kernel ('rbf'). Use a range of C and gamma parameters.</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12375,240 +12547,7 @@ mVU4QTAzM7MKJwhmZmZW4QTBzMzMKv4fWXuvnSKrHeAAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Make a scatter plot comparing Rotten Tomatoes critic score vs. imdb ratings. Change the x/y axis labels to something nicer and add a title.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>(BONUS) Make the same rt vs. imdb scatter plot as above but facet by mpaa_ratings. (<a href="http://stackoverflow.com/questions/34762280/how-to-plot-facet-gridggplot-in-r-in-python">http://stackoverflow.com/questions/34762280/how-to-plot-facet-gridggplot-in-r-in-python</a>)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Again make the same rt vs. imdb scatter plot but color the points by mpaa_ratings.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>One last time make the rt vs. imdb scatter plot but now try including runtime as a third variable using point</p>
-<ul>
-<li>color</li>
-<li>size</li>
-<li>alpha</li>
-</ul>
-<p>Which one of these is “best”?</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Data-transformation">Data transformation<a class="anchor-link" href="#Data-transformation">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Subset the columns of <code>movies</code> to keep the following variables: <strong>runtime</strong>, <strong>genre</strong>, <strong>mpaa_rating</strong>, <strong>thtr_rel_year</strong>, <strong>imdb_rating</strong>, <strong>imdb_num_votes</strong>, <strong>critics_score</strong>, <strong>audience_score</strong>, and <strong>best_pic_win</strong>. Make sure to update the movies data frame.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Compute the mean of each continuous variable. <em>Hint</em>: you'll have to deal with a missing value in <strong>runtime</strong>.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Which movie is missing the <strong>runtime</strong>?</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Google this filem ad manually add the runtime.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Compute the mean imdb rating for movies by genere. <em>Hint</em>: use <a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html">groupby</a></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Similarly, compute the mean number of imdb votes for each mpaa_rating category then plot the mean ratings.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Compute the compare the average imdb rating of movies longer than 100 minutes to that of movies shorter than 100 minutes. The resulting printed out data frame should only have two columns.</p>
-
+<h1 id="Compute-the-test-error-for-each-of-the-classifiers">Compute the test error for each of the classifiers<a class="anchor-link" href="#Compute-the-test-error-for-each-of-the-classifiers">&#182;</a></h1>
 </div>
 </div>
 </div>

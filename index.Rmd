@@ -17,9 +17,28 @@ This page contains a number of introduction to data science tutorials and a list
 
 The (free) [R for Data Science](http://r4ds.had.co.nz/) by Hadley Wickham is a fantastic resource to learn R.
 
+If you are brand new to R [**see this page to get started**](R/new_to_R.html).
+
+## Exercises
 
 
-[These viz + subsetting exercises](R/movies_ggplot_dplyr.html) will give you practice data manipulation and plotting with `dplyr` and `ggplot`. If you are familiar with base R these will be helpful to learn the [tidyverse](http://tidyverse.org/). 
+[**Viz + subsetting**](R/movies_ggplot_dplyr.html) 
+
+Practice data manipulation and plotting with `dplyr` and `ggplot`. If you are familiar with base R these will be helpful to learn the [tidyverse](http://tidyverse.org/). 
+
+[**Analyze UNC deparments**](https://idc9.github.io/stor390/assignments/unc_depts/unc_depts.html) (more viz + subsetting).
+
+
+[**Modeling + more viz**](R/movies_modeling.html) 
+
+Practice fitting machine learning models and visualizing high-dimensional data.
+
+
+
+## Resources
+
+[**R for Data Science**](http://r4ds.had.co.nz/)
+
 
 
 # **Python**
@@ -27,10 +46,32 @@ The (free) [R for Data Science](http://r4ds.had.co.nz/) by Hadley Wickham is a f
 If you are new to Python and have some previous programming experience I suggest going through [Google's Python class](https://developers.google.com/edu/python/) to get started with Python. Spend a couple hours working through the class until you get the hang of it. Then download [Anaconda](https://www.continuum.io/downloads) which has most of the stats/machine learning Python packages you'll need. It also comes with [Jupyter notebook](http://jupyter.org/) (formerly iPython) which you should use for data science projects. *Warning*: both Python 2 and 3 are commonly used.
 
 
+## Exercises
+
+[**Viz + subsetting**](Python/movies_viz_subsetting.html) 
+
+Practice data manipulation and plotting with `pandas` and `matplotlib`.
 
 
-[These viz + subsetting exercises](Python/movies_viz_subsetting.html) will give you practice data manipulation and plotting with `pandas` and `matplotlib`.
+[**Modeling + more viz**](Python/moives_modeling.html) 
 
+Practice fitting machine learning models and visualizing high-dimensional data with `sklearn` and `statsmodels`.
+
+## Resources
+
+[**Chris Albon's website**](http://chrisalbon.com/) (great for a lot of things, particularly for pandas)
+
+[**Python for Data Science**](http://nbviewer.jupyter.org/github/jakevdp/PythonDataScienceHandbook/blob/master/notebooks/Index.ipynb) as a Jupyter notebook
+
+
+[**Computational Statistics**](http://people.duke.edu/~ccc14/sta-663-2016/index.html)
+
+
+# Other resources
+
+[**Introduction to Statistical Learning with Applications in R**](http://www-bcf.usc.edu/~gareth/ISL/) is a fantastics textbook.
+
+[**Advice for data fest from 2016**](http://rpubs.com/iain/DataFest)
 
 
 # **Acknowledgements**

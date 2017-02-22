@@ -1,0 +1,45 @@
+---
+title: "New to R"
+output: html_document
+---
+
+
+**Download the latest version of R from the [Comprehensive R Archive Network](https://cran.rstudio.com/)** (CRAN). [R](https://www.r-project.org/about.html) is a programming language built for statistical analysis.
+
+**Download [R Studio](https://www.rstudio.com/products/rstudio/#Desktop)** which is an [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) built for R. While you can use R without R Studio, R Studio makes life much better.
+
+
+# Introduction resources
+
+If you are new to R I suggest reading through [**before we start**](http://www.datacarpentry.org/R-ecology-lesson/00-before-we-start.html) and [**intro to R**](http://www.datacarpentry.org/R-ecology-lesson/01-intro-to-R.html). 
+
+[**R for Data Science**](http://r4ds.had.co.nz/) by Hadley Wickham is a fantastic R textbook.
+
+You might find [STOR 390](https://idc9.github.io/stor390/) helpful.
+
+# Swirl
+
+[**swirl**](http://swirlstats.com/) is an interactive R tutorial. Install and load the swirl package. Run the following code in the R Studio console.
+
+```{r swirl, eval=F}
+install.packages('swirl')
+library(swirl)
+```
+
+Once the swirl package has loaded you can get started by running
+```{r start, eval=F}
+swirl()
+```
+
+There are a few swirl courses. I suggest getting started with `R Programming` which comes preloaded. You can install other courses
+
+```{r install, eval=FALSE}
+install_course("Exploratory_Data_Analysis")
+install_course("Getting_and_Cleaning_Data")
+install_course("Data_Analysis")
+```
+
+Once you have installed a course it should show up on the swirl dashboard.
+
+
+

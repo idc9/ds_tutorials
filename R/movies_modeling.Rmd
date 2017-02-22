@@ -1,0 +1,168 @@
+---
+title: "IMDb vs. Rotten Tomatoes"
+subtitle: 'Statistical modeling with R'
+output: html_document
+---
+
+
+This tutorial will give you practice with
+
+- visualizing high dimensional data
+- linear regression
+- train/test set
+- cross-validation
+- L1/L2 penalized logistic regression
+- Support Vector Machine
+- Kernel SVM
+
+ISLR is a good reference for all of these topics (4.3, 5.1, 6.2, 9.1-9.3, 10.2)
+
+
+**Prerequisites**: this tutorial assumes you are familiar with the above models (or are willing to learn about them). The questions are fairly independent so you can skip parts you don't like/understand. This tutorial also assumes you are familiar with R.
+
+**Hints**: I suggest writing all of the code in an R script then transferring the answers to a .Rmd file.
+
+
+
+# **The data**
+
+The data include 651 randomly selected movies scraped from the IMDb and Rotten Tomatoes websites. The data were generously provided by Mine Cetinkaya-Rundel and you can find the original data set on [her website](http://www2.stat.duke.edu/~mc301/data/movies.html).
+
+
+
+```{r, warning=FALSE, message=FALSE}
+# if you don't have these packages then install them
+# install.packages('tidyverse')
+# install.packages('GGally')
+
+library(tidyverse)
+library(GGally)
+movies <- read_csv('https://raw.githubusercontent.com/idc9/stor390/master/data/movies.csv')
+
+# fix a missing value
+movies[movies[, 'title' ] == 'The End of America', 'runtime'] <- 73
+```
+
+Take a first look at the data
+```{r}
+head(movies)
+```
+
+Remove some columns to make life a title easier
+```{r}
+movies <- movies %>% 
+       select(title, runtime,genre, mpaa_rating, thtr_rel_year, imdb_rating, imdb_num_votes, critics_score, audience_score, best_pic_win, best_actor_win)
+```
+
+
+
+# Visualization
+
+
+The `GGally::ggpairs()` functions have nice 2 dimensional slice visualizations.
+```{r}
+movies %>%
+    select(imdb_rating,imdb_num_votes,
+           critics_score, audience_score) %>% 
+    ggpairs()
+```
+
+Play around with with the `ggpairs` function to explore pairwise relationships between some of the variables.
+
+
+
+# Linear regression
+
+Use `ggplot` to plot the linear regression line for **imdb_rating** ~ **critics_score**.
+
+```{r}
+#
+```
+
+
+Use the `lm` function to fit the following liner regression **imdb_rating** ~ **critics_score** + **audience_score** + **imdb_num_votes**
+
+```{r}
+
+
+```
+
+
+# **Inference task**: how are movie ratings related to best actor winning an Oscar?
+
+Fit a simple logistic regression model **best_actor_win** ~ **imdb_rating** using the `LogicReg` package.
+
+
+```{r}
+#
+```
+
+
+What is the interpretation of the **imdb_rating** coefficient? 
+
+(Bonus): make one of [these plots](http://www.cookbook-r.com/Statistical_analysis/Logistic_regression/) with **imdb_rating** on the x axis and the predicted probability on the y axis (including the data points).
+
+```{r}
+#
+```
+
+Again fit a logistic regression model, but this time include all of the excoriates. Hint: You need to deal with categorical variables -- change these into dummy variables.
+
+
+```{r}
+#
+```
+
+Discuss what is the interpretation of these coefficients? Can we make any make any conclusions about causal relationships? If not, how would you try to get at causation (i.e. study design)?
+
+
+# **Prediction task**: what's the best model to predict whether or not the best actor will win an Oscar?
+
+The point of this section is to fit several models and compare them on a test set. Specifically we are going to fit the following models
+
+- L1 regularized logistic regression
+- L2 regularized logistic regression
+- Support Vector Machine
+- Kernel Support Vector machine
+
+
+First, turn the categorical variables into dummy variables. *Hint*: pd.get_dummies. You data frame should only have *numbers* in it now.
+
+```{r}
+#
+```
+
+
+Split the data into a training and test set (80% train, 20% test). Since the classes are fairly unbalanced you should use stratified sampling. Make two new data frames (called **train** and **test**). Fit all of the following models with the training data.
+
+```{r}
+#
+```
+
+# Train models
+
+Each of the models listed above comes with one or more tuning parameter. First hand code a double for loop that performed cross validation for L2 regularized logistic regression.
+
+
+```{r}
+#
+```
+
+
+For the rest of the models use the `caret` package to [tune each model](http://topepo.github.io/caret/train-models-by-tag.html) with cross-validation. Here is a list of [models supported by caret](http://topepo.github.io/caret/train-models-by-tag.html)
+
+
+
+```{r}
+#
+```
+
+# Test set
+
+Compute the test set error for each classifier.
+
+
+
+
+
+
