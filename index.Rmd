@@ -22,7 +22,7 @@ If you are brand new to R [**see this page to get started**](R/new_to_R.html).
 ## Exercises
 
 
-[**Viz + subsetting**](R/movies_ggplot_dplyr.html) 
+[**Viz + subsetting**](R/movies_viz_subsetting.html) 
 
 Practice data manipulation and plotting with `dplyr` and `ggplot`. If you are familiar with base R these will be helpful to learn the [tidyverse](http://tidyverse.org/). 
 
