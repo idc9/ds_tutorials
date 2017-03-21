@@ -53,7 +53,7 @@ If you are new to Python and have some previous programming experience I suggest
 Practice data manipulation and plotting with `pandas` and `matplotlib`.
 
 
-[**Modeling + more viz**](Python/moives_modeling.html) 
+[**Modeling + more viz**](Python/movies_modeling.html) 
 
 Practice fitting machine learning models and visualizing high-dimensional data with `sklearn` and `statsmodels`.
 
