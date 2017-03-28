@@ -40,6 +40,7 @@ Practice fitting machine learning models and visualizing high-dimensional data.
 [**R for Data Science**](http://r4ds.had.co.nz/)
 
 
+The [**JHU data science specialization**](https://www.coursera.org/specializations/jhu-data-science) on Coursera is a good crash course in R.
 
 # **Python**
 
@@ -67,11 +68,12 @@ Practice fitting machine learning models and visualizing high-dimensional data w
 [**Computational Statistics**](http://people.duke.edu/~ccc14/sta-663-2016/index.html)
 
 
-# Other resources
+# **Other resources**
 
 [**Introduction to Statistical Learning with Applications in R**](http://www-bcf.usc.edu/~gareth/ISL/) is a fantastics textbook.
 
-[**Advice for data fest from 2016**](http://rpubs.com/iain/DataFest)
+[This google doc](https://docs.google.com/document/d/18gBqIGNyOqzqygRjFAIA7jnieXRVMtBc2_yL7UD-3TM/edit?usp=sharing) contains a list of my favorite statistics/machine learning/data science resources (most are free online).
+
 
 
 # **Acknowledgements**
